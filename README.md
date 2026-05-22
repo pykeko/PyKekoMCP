@@ -24,7 +24,8 @@ calls `window.MoorhenControlApi`). `screenshot` is served by the wrapper via `ca
 ## Requirements
 
 - A running Moorhen app (`MoorhenLocal.app` = vite port 5173, default; `MoorhenDev.app` = 5174)
-  built from the `feat/mcp-control` branch (control bridge + preload).
+  built from [3viil/MoorhenWrapper](https://github.com/3viil/MoorhenWrapper) against
+  [3viil/MoorHenMH](https://github.com/3viil/MoorHenMH) (control bridge + preload baked in).
 - Node.js 18+ (uses global `fetch`).
 
 ## Build
