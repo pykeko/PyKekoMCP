@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/3viil/PyKeko/main/PyKeko_icon.png" alt="PyKeko" width="120" height="120" />
+</p>
+
 # PyKekoMCP
 
 An [MCP](https://modelcontextprotocol.io) server that lets Claude drive a **running**
