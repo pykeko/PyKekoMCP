@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-// MoorhenMCP — an MCP server that drives a running MoorhenMH (Coot) desktop app.
+// PyKekoMCP — an MCP server that drives a running PyKeko (Moorhen-based Coot) desktop app.
 //
-// Transport: the MoorhenWrapper Electron app runs a localhost HTTP control server
+// Transport: the PyKeko Electron app runs a localhost HTTP control server
 // (token-auth) and writes its {port, token} to ~/.moorhen-mcp/control-<vitePort>.json.
 // Each tool here POSTs {token, verb, args} to that endpoint; the wrapper forwards to the
 // in-page MoorhenControlBridge (which calls window.MoorhenControlApi) and returns the result.
 // "screenshot" is served by the wrapper itself via webContents.capturePage.
 //
-// Target which app: MOORHEN_VITE_PORT (default 5173 = MoorhenLocal; 5174 = MoorhenDev).
+// Target which app: MOORHEN_VITE_PORT (default 5173; 5174 = PyKekoDev).
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";

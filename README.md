@@ -1,14 +1,15 @@
-# MoorhenMCP
+# PyKekoMCP
 
 An [MCP](https://modelcontextprotocol.io) server that lets Claude drive a **running**
-[MoorhenMH](https://github.com/3viil/MoorHenMH) (Coot) desktop app — load structures and
-maps, navigate, run Coot edits (refine, rotamer fit, peptide flip, add waters, delete,
-mutate-via-CID), undo/redo, and capture screenshots of the 3D view.
+[PyKeko](https://github.com/3viil/PyKeko) (Moorhen-based Coot) desktop app — load
+structures and maps, navigate, run Coot edits (refine, rotamer fit, peptide flip,
+add waters, delete, mutate-via-CID), undo/redo, and capture screenshots of the 3D
+view.
 
 ## How it works
 
 ```
-Claude ──stdio(MCP)──▶ MoorhenMCP (this) ──HTTP(127.0.0.1, token)──▶ MoorhenWrapper main
+Claude ──stdio(MCP)──▶ PyKekoMCP (this) ──HTTP(127.0.0.1, token)──▶ PyKeko main
        └─ tools                                                       │ (control server)
                                                                       ▼ IPC
                                             MoorhenControlBridge ──▶ window.MoorhenControlApi
@@ -16,16 +17,18 @@ Claude ──stdio(MCP)──▶ MoorhenMCP (this) ──HTTP(127.0.0.1, token)�
                                             commandCentre.cootCommand ──▶ CootWorker (WASM)
 ```
 
-The `MoorhenLocal`/`MoorhenDev` Electron apps run a local, token-authenticated HTTP control
-server and write their `{port, token}` to `~/.moorhen-mcp/control-<vitePort>.json`. Each tool
-POSTs `{token, verb, args}` there; the wrapper forwards to the in-page control bridge (which
-calls `window.MoorhenControlApi`). `screenshot` is served by the wrapper via `capturePage`.
+The `PyKeko`/`PyKekoDev` Electron apps run a local, token-authenticated HTTP control
+server and write their `{port, token}` to `~/.moorhen-mcp/control-<vitePort>.json`. Each
+tool POSTs `{token, verb, args}` there; the wrapper forwards to the in-page control
+bridge (which calls `window.MoorhenControlApi`). `screenshot` is served by the wrapper
+via `capturePage`.
 
 ## Requirements
 
-- A running Moorhen app (`MoorhenLocal.app` = vite port 5173, default; `MoorhenDev.app` = 5174)
-  built from [3viil/MoorhenWrapper](https://github.com/3viil/MoorhenWrapper) against
-  [3viil/MoorHenMH](https://github.com/3viil/MoorHenMH) (control bridge + preload baked in).
+- A running PyKeko app (`PyKeko.app` = self-contained dist, dynamic port; `PyKekoDev.app`
+  = vite port 5174) built from [3viil/PyKeko](https://github.com/3viil/PyKeko) against
+  [3viil/Moorhen-PyKeko](https://github.com/3viil/Moorhen-PyKeko) (control bridge +
+  preload baked in).
 - Node.js 18+ (uses global `fetch`).
 
 ## Build
@@ -38,13 +41,13 @@ npm run build
 ## Use with Claude Code
 
 ```bash
-claude mcp add moorhen -- node /Users/hilgersmt/MoorhenMCP/dist/server.js
+claude mcp add pykeko -- node /Users/hilgersmt/PyKekoMCP/dist/server.js
 ```
 
-To target MoorhenDev instead of MoorhenLocal, set `MOORHEN_VITE_PORT=5174`:
+To target PyKekoDev instead, set `MOORHEN_VITE_PORT=5174`:
 
 ```bash
-claude mcp add moorhen-dev -e MOORHEN_VITE_PORT=5174 -- node /Users/hilgersmt/MoorhenMCP/dist/server.js
+claude mcp add pykeko-dev -e MOORHEN_VITE_PORT=5174 -- node /Users/hilgersmt/PyKekoMCP/dist/server.js
 ```
 
 ## Tools
@@ -65,10 +68,14 @@ claude mcp add moorhen-dev -e MOORHEN_VITE_PORT=5174 -- node /Users/hilgersmt/Mo
 | `moorhen_undo` / `moorhen_redo` | undo/redo edits |
 | `moorhen_screenshot` | PNG of the 3D view |
 
+(Tool names keep the `moorhen_` prefix because they're wire-level identifiers shared
+with the in-page control bridge — renaming would break compatibility with the wrapper.)
+
 CID selections follow Coot/mmdb syntax, e.g. `//A/45` (residue), `/1/A/45/CA` (atom),
 `/1/A/45/*` (all atoms of a residue, for delete).
 
 ## Env
 
-- `MOORHEN_VITE_PORT` — which app to target (5173 = MoorhenLocal default, 5174 = MoorhenDev)
+- `MOORHEN_VITE_PORT` — which app to target (default 5173 — dist picks dynamically;
+  5174 = PyKekoDev)
 - `MOORHEN_CONTROL_FILE` — override the control file path

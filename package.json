@@ -1,9 +1,9 @@
 {
-  "name": "moorhen-mcp",
+  "name": "pykeko-mcp",
   "version": "0.1.0",
-  "description": "MCP server to drive a running MoorhenMH (Coot) desktop app",
+  "description": "MCP server to drive a running PyKeko (Moorhen-based Coot) desktop app",
   "type": "module",
-  "bin": { "moorhen-mcp": "dist/server.js" },
+  "bin": { "pykeko-mcp": "dist/server.js" },
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
