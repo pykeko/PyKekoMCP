@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/3viil/PyKeko/main/PyKeko_icon.png" alt="PyKeko" width="120" height="120" />
+  <img src="https://raw.githubusercontent.com/pykeko/PyKeko/main/PyKeko_icon.png" alt="PyKeko" width="120" height="120" />
 </p>
 
 # PyKekoMCP
 
 An [MCP](https://modelcontextprotocol.io) server that lets Claude drive a **running**
-[PyKeko](https://github.com/3viil/PyKeko) (Moorhen-based Coot) desktop app — load
+[PyKeko](https://github.com/pykeko/PyKeko) (Moorhen-based Coot) desktop app — load
 structures and maps, navigate, run Coot edits (refine, rotamer fit, peptide flip,
 add waters, delete, mutate-via-CID), undo/redo, and capture screenshots of the 3D
 view.
@@ -30,8 +30,8 @@ via `capturePage`.
 ## Requirements
 
 - A running PyKeko app (`PyKeko.app` = self-contained dist, dynamic port; `PyKekoDev.app`
-  = vite port 5174) built from [3viil/PyKeko](https://github.com/3viil/PyKeko) against
-  [3viil/Moorhen-PyKeko](https://github.com/3viil/Moorhen-PyKeko) (control bridge +
+  = vite port 5174) built from [pykeko/PyKeko](https://github.com/pykeko/PyKeko) against
+  [pykeko/Moorhen-PyKeko](https://github.com/pykeko/Moorhen-PyKeko) (control bridge +
   preload baked in).
 - Node.js 18+ (uses global `fetch`).
 

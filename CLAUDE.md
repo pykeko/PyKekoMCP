@@ -1,8 +1,8 @@
-# Claude context — `3viil/PyKekoMCP`
+# Claude context — `pykeko/PyKekoMCP`
 
-MCP server (Model Context Protocol) that lets Claude drive a running [PyKeko](https://github.com/3viil/PyKeko) app — load coords/maps, navigate, refine, screenshot.
+MCP server (Model Context Protocol) that lets Claude drive a running [PyKeko](https://github.com/pykeko/PyKeko) app — load coords/maps, navigate, refine, screenshot.
 
-See [`3viil/PyKeko/CLAUDE.md`](https://github.com/3viil/PyKeko/blob/main/CLAUDE.md) for the full project family overview, naming conventions, and the wire-protocol identifier list (do-not-rename rules apply here too).
+See [`pykeko/PyKeko/CLAUDE.md`](https://github.com/pykeko/PyKeko/blob/main/CLAUDE.md) for the full project family overview, naming conventions, and the wire-protocol identifier list (do-not-rename rules apply here too).
 
 ## Build & install for Claude Code
 
