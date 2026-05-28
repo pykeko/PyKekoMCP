@@ -23,6 +23,6 @@ The MCP server name in `~/.claude.json` is currently still `"moorhen"` (rather t
 
 ## Current state
 
-- Version: `0.1.0`
+- Version: `0.1.0` — unchanged through the project's **pk-v0.2** release (2026-05-28); the 0.2.0 work was renderer + wrapper only, no MCP tool changes. This server is compatible with the PyKeko pk-v0.2 app. (Bump + republish only when the tool set actually changes.)
 - Default branch: `main`
 - Last meaningful change: rebrand from `MoorhenMCP` to `PyKekoMCP` (README + comments + package name + dist rebuilt)
