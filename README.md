@@ -10,6 +10,8 @@ structures and maps, navigate, run Coot edits (refine, rotamer fit, peptide flip
 add waters, delete, mutate-via-CID), undo/redo, and capture screenshots of the 3D
 view.
 
+> 🐦 **Part of the [PyKeko project](https://github.com/pykeko)** — see the org page for what PyKeko is, the Coot→Moorhen→PyKeko heritage, and install instructions. This README covers the **MCP server's internals**.
+
 ## How it works
 
 ```
