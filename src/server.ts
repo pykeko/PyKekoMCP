@@ -130,5 +130,19 @@ server.tool("moorhen_screenshot", "Capture a PNG screenshot of the current Moorh
   return { content: [{ type: "image" as const, data: r.png, mimeType: "image/png" }] };
 });
 
+server.tool(
+  "moorhen_declare_covalent_link",
+  "Declare a covalent link between a Cys SG atom and a ligand carbon (Cβ). Loads the link CIF into Coot, writes a _struct_conn row to the augmented mmCIF, downloads it (for refmacat), and applies the mod2 to the in-viewer ligand chem_comp so bond orders reflect the post-reaction state. Registry has 14 entries across F1-F6 chemistries (e.g. CYS-YNA-post, CYS-ACR-pre-terminal, CYS-CAA-pre, CYS-EPX-pre, CYS-MAL-pre, CYS-RVC-pre).",
+  {
+    sgCid: z.string().describe("Short-form CID of the Cys SG atom (e.g. //A/481/SG)"),
+    cbCid: z.string().describe("Short-form CID of the ligand Cβ atom (e.g. //A/801/C19)"),
+    linkId: z.string().describe("Registry entry id from cov-links/index.json (e.g. CYS-ACR-pre-terminal, CYS-YNA-post, CYS-CAA-pre)"),
+    molNo: z.number().optional().describe("Molecule molNo containing both Cys and ligand (default: first loaded molecule)"),
+    download: z.boolean().optional().describe("Trigger browser download of the augmented mmCIF (default true)"),
+  },
+  async ({ sgCid, cbCid, linkId, molNo, download }) =>
+    ok(await invoke("declareCovalentLink", [sgCid, cbCid, linkId, molNo, download ?? true]))
+);
+
 const transport = new StdioServerTransport();
 await server.connect(transport);
