@@ -131,6 +131,41 @@ server.tool("moorhen_screenshot", "Capture a PNG screenshot of the current Moorh
 });
 
 server.tool(
+  "moorhen_eval",
+  "Evaluate JavaScript inside the PyKeko renderer's global scope and return a printable summary of the result. " +
+    "Scope is the renderer (window, document, MoorhenControlApi, all loaded React/Redux state) — same access as Chrome DevTools, " +
+    "NO main-process / Node / fs access. Use this to introspect live state, test hypotheses, drive the bridge directly. " +
+    "Single expressions (e.g. `MoorhenControlApi.listMolecules?.()`) and statement blocks (e.g. `const m = ...; m.atomCount`) " +
+    "both work; `await` is supported. The returned `repr` is a JSON-stringified, depth- and length-capped summary " +
+    "(`undefined` for void, the value itself for primitives, type-tagged + key-listed object skeleton for objects). " +
+    "Errors come back as `kind: 'error'` with the stack in `error`.",
+  { src: z.string().describe("JS source to evaluate") },
+  async ({ src }) => {
+    const r: any = await invoke("evalJs", [src]);
+    if (!r?.ok) return ok({ kind: "error", error: r?.error || "unknown error" });
+    return ok({ kind: r.kind, repr: r.repr });
+  }
+);
+
+server.tool(
+  "moorhen_set_cwd",
+  "Change PyKeko's active working directory. Files saved by PyKeko's in-app save handlers (covalent link, save-text-file, save-augmented-cif, native save-dialog defaults) all route to this directory after the change. Accepts ~, $VAR, and relative paths.",
+  { path: z.string().describe("Target directory. ~/foo and relative paths are resolved against the current cwd.") },
+  async ({ path: p }) => {
+    const r: any = await invoke("setCwd", [p]);
+    if (!r?.ok) return ok({ ok: false, error: r?.error || "unknown error" });
+    return ok({ ok: true, cwd: r.cwd });
+  }
+);
+
+server.tool(
+  "moorhen_get_cwd",
+  "Get PyKeko's current active working directory and the directory it was originally launched from.",
+  {},
+  async () => ok(await invoke("getCwd"))
+);
+
+server.tool(
   "moorhen_declare_covalent_link",
   "Declare a covalent link between a Cys SG atom and a ligand carbon (Cβ). Loads the link CIF into Coot, writes a _struct_conn row to the augmented mmCIF, downloads it (for refmacat), and applies the mod2 to the in-viewer ligand chem_comp so bond orders reflect the post-reaction state. Registry has 14 entries across F1-F6 chemistries (e.g. CYS-YNA-post, CYS-ACR-pre-terminal, CYS-CAA-pre, CYS-EPX-pre, CYS-MAL-pre, CYS-RVC-pre).",
   {
