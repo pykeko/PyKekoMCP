@@ -131,6 +131,33 @@ server.tool("moorhen_screenshot", "Capture a PNG screenshot of the current Moorh
 });
 
 server.tool(
+  "moorhen_run_dimple",
+  "Spawn CCP4's dimple auto-pipeline (rigid-body / MR + restrained refinement + optional ligand fit) end-to-end. Inputs: model PDB path, MTZ path, optional ligand CIF path or SMILES. Refined model lands at <outDir>/final.pdb and is loaded back into PyKeko automatically. Typical runtime 2-10 minutes; progress streams to the in-app log console. Requires CCP4 installed locally.",
+  {
+    modelPath: z.string().describe("Absolute path to the input PDB (or mmCIF) model."),
+    mtzPath: z.string().describe("Absolute path to the MTZ with observed structure factors."),
+    ligandCifPath: z.string().optional().describe("Absolute path to a ligand chem_comp CIF; dimple will fit it into the strongest Fo-Fc blob."),
+    smiles: z.string().optional().describe("Alternative to ligandCifPath — dimple generates the dict from this SMILES."),
+    outDir: z.string().optional().describe("Output directory (default: <mtz_dir>/dimple_<model_basename>)."),
+    restrCycles: z.number().optional().describe("Restrained refinement cycles (default 8)."),
+    mrThreshold: z.number().optional().describe("R-factor threshold above which dimple switches to molecular replacement (default 0.4)."),
+  },
+  async (a) => {
+    const r: any = await invoke("runDimple", [{
+      modelPath: a.modelPath, mtzPath: a.mtzPath,
+      ligandCifPath: a.ligandCifPath ?? null,
+      smiles: a.smiles ?? null,
+      outDir: a.outDir ?? null,
+      restrCycles: a.restrCycles,
+      mrThreshold: a.mrThreshold,
+    }]);
+    // Strip the giant PDB text from the returned blob — the caller can read the file.
+    if (r?.finalPdbText) r.finalPdbText = `(${r.finalPdbText.length} chars — read from ${r.finalPdb})`;
+    return ok(r);
+  }
+);
+
+server.tool(
   "moorhen_eval",
   "Evaluate JavaScript inside the PyKeko renderer's global scope and return a printable summary of the result. " +
     "Scope is the renderer (window, document, MoorhenControlApi, all loaded React/Redux state) — same access as Chrome DevTools, " +
